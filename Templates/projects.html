@@ -1,31 +1,22 @@
-<!--<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/trials.css') }}">-->
+
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trials</title>
+  <title>Projects</title>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/trials.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/projects.css') }}">
 </head>
 <body>
   <table id="myTable">
     <thead style="position: sticky; top: 0;">
       <tr>
-        <th style="width: 120px;">Trial ID</th>
-        <th>Trial Year</th>
-        <th>Trial Country</th>
-        <th>Trial Operator</th>
-        <th>Rep Company</th>
-        <th>Venue/Macro/POC</th>
-        <th>Antenna Qty x Model #</th>
-        <th>Antenna Readiness ETA</th>
-        <th>Antenna Shipment ETA</th>
-        <th>Shipped Model # - Serial #</th>
-        <th>AOS Status</th>
-        <th>Trial Status</th>
-        <th>Trial Start Date</th>
-        <th>Trial End Date</th>
-        <th>Trial Result</th>
-        <th>Antenna Status</th>
+        <th style="width: 120px;">Project ID</th>
+        <th>Year</th>
+        <th>Country</th>
+        <th>Status</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Result</th>
         <th>Notes</th>
         <th>Last Update Date</th>
       </tr>
@@ -33,22 +24,13 @@
     <tbody>
       {% for row in rows %}
       <tr>
-        <td><a href="{{ url_for('trial_activity', id=row.trial_id) }}" target="_blank">{{ row.trial_id }}</a></td>
-        <td data-field="trial_year">{{ row.trial_year }}</td>
+        <td><a href="{{ url_for('project_activity', id=row.project_id) }}" target="_blank">{{ row.project_id }}</a></td>
+        <td data-field="trial_year">{{ row.project_year }}</td>
         <td data-field="country">{{ row.country }}</td>
-        <td data-field="operator">{{ row.operator }}</td>
-        <td data-field="rep_company">{{ row.rep_company }}</td>
-        <td data-field="venue">{{ row.venue }}</td>
-        <td data-field="model_qty">{{ row.model_qty }}</td>
-        <td data-field="antenna_readiness_eta">{{ row.antenna_readiness_eta }}</td>
-        <td data-field="antenna_shipment_eta">{{ row.antenna_shipment_eta }}</td>
-        <td data-field="shipped_model_serial">{{ row.shipped_model_serial }}</td>
-        <td data-field="aos_status">{{ row.aos_status }}</td>
         <td data-field="status">{{ row.status }}</td>
         <td data-field="start_date">{{ row.start_date }}</td>
         <td data-field="end_date">{{ row.end_date }}</td>
         <td data-field="result">{{ row.result }}</td>
-        <td data-field="antenna_status">{{ row.antenna_status }}</td>
         <td data-field="notes">{{ row.notes }}</td>
         <td data-field="last_updated">{{ row.last_updated }}</td>
       </tr>
@@ -59,32 +41,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
   <script>
-    // Listen for the page unload event
-    window.addEventListener('beforeunload', function() {
-      // Reset the visited link styles
-      var links = document.querySelectorAll('a:visited');
-      for (var i = 0; i < links.length; i++) {
-        links[i].style.color = '';
-      }
-    });
-    $(document).ready(function() {
-      // Initialize DataTable with sorting and search
-      $('#myTable').DataTable({
-        // Sort by the first column in ascending order by default
-        order: [[0, 'asc']],
-        // Disable pagination
-        paging: false,
-        // Enable searching within the table
-        searching: true,
-        // Define column-specific options
-        columnDefs: [
-          // Disable sorting for columns 2 onwards (indices 1 and higher)
-          { orderable: false, targets: '_from2' }
-        ]
-      });
-      // Add margin between search bar and table
-      $('.dataTables_filter').css('margin-bottom', '20px');
-    });
 
 
     var table = document.querySelector('table');
@@ -107,7 +63,7 @@
                     var field = cell.getAttribute('data-field');
                     var data = {'id': id, 'field': field, 'value': newValue};
                     console.log(data);
-                    fetch('/update-trial', {
+                    fetch('/update-project', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

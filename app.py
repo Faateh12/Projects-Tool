@@ -72,11 +72,11 @@ def logout():
 def generate_next_trial_id():
     current_year = datetime.now().year
     last_two_digits = current_year % 100
-    latest_ticket = Projects.query.order_by(Projects.trial_id.desc()).first()
+    latest_ticket = Projects.query.order_by(Projects.project_id.desc()).first()
 
     if latest_ticket:
-        latest_year = int(latest_ticket.trial_id.split("-")[2])
-        counter = int(latest_ticket.trial_id.split("-")[3])
+        latest_year = int(latest_ticket.project_id.split("-")[2])
+        counter = int(latest_ticket.project_id.split("-")[3])
 
         if latest_year == last_two_digits:
             counter += 1
@@ -116,10 +116,10 @@ def login():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
-        username = request.form['username']
+        username = request.form['name']
         email = request.form['email']
         password = request.form['password']
-        confirm = request.form['confirm']
+        confirm = request.form['confirm-password']
         if " " in username:
             username_parts = username.split(" ")
             username = username_parts[0]
@@ -146,41 +146,41 @@ def user_home():
     current = current_user._get_current_object()
     return render_template("home.html", user=current)
 
-@app.route('/trials', methods=['GET', 'POST'])
-def trials():
-    rows = Trials.query.all()
-    return render_template("trials.html", rows=rows)
+@app.route('/projects', methods=['GET', 'POST'])
+def projects():
+    rows = Projects.query.all()
+    return render_template("projects.html", rows=rows)
 
-@app.route('/new-trial', methods=['GET', 'POST'])
-def new_trial():
+@app.route('/new-project', methods=['GET', 'POST'])
+def new_project():
     if request.method == "POST":
-        operator = request.form.get("operator")
+        # operator = request.form.get("operator")
         country = request.form.get("country")
-        rep_company = request.form.get("rep-company")
-        venue = request.form.get("venue")
+        # rep_company = request.form.get("rep-company")
+        # venue = request.form.get("venue")
         selected_date = request.form.get("date")
         parsed_date = datetime.strptime(selected_date, "%Y-%m-%d")
         formatted_date = parsed_date.strftime("%m/%d/%Y")
-        trial = Trials(
-            trial_id=generate_next_trial_id(),
-            trial_year=datetime.now().year,
+        project = Projects(
+            project_id=generate_next_trial_id(),
+            project_year=datetime.now().year,
             country=country,
-            operator=operator,
-            rep_company=rep_company,
-            venue=venue,
+            # operator=operator,
+            # rep_company=rep_company,
+            # venue=venue,
             start_date=formatted_date
         )
-        db.session.add(trial)
+        db.session.add(project)
         db.session.commit()
         print("sucessfully added new trial")
-    return render_template("new-trial.html")
+    return render_template("new-project.html")
 
-@app.route("/trial-activity/<id>", methods=['GET', 'POST'])
+@app.route("/project-activity/<id>", methods=['GET', 'POST'])
 # @login_required
-def trial_activity(id):
+def project_activity(id):
     current = current_user._get_current_object()
     results = notes.query.filter_by(trial_id=id).order_by(notes.id.desc()).all()
-    return render_template("trial-activity.html", notes=results, trial_number=id, user=current)
+    return render_template("project-activity.html", notes=results, trial_number=id, user=current)
 
 @app.route("/save-activity", methods=['GET', 'POST'])
 # @login_required
@@ -203,7 +203,7 @@ def save_activity():
     return jsonify({'status': 'success'})
 
 
-@app.route("/update-trial", methods=['GET', 'POST'])
+@app.route("/update-project", methods=['GET', 'POST'])
 # @login_required
 def update_ticket():
     if request.method == "POST":
@@ -215,7 +215,7 @@ def update_ticket():
         soup = BeautifulSoup(value, 'html.parser')
         cleaned_value = soup.get_text()
         print(cleaned_value)
-        ticket = Trials.query.get(ticket_id)
+        ticket = Projects.query.get(ticket_id)
         setattr(ticket, field, cleaned_value)
         db.session.commit()
     return jsonify({'status': 'success'})

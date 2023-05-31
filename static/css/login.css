@@ -12,7 +12,7 @@ body {
 }
 
 .navbar {
-  background-color: #ADD8E6 /* Updated dark color */
+  background-color: #ADD8E6; /* Updated dark color */
 }
 .navbar-brand {
   font-weight: bold;
@@ -46,6 +46,7 @@ img {
 .card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   border-radius: 10px;
+  margin-top: 130px;
 }
 
 /* Media Query for smaller screens */

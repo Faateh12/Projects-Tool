@@ -7,7 +7,7 @@ body {
 }
 
 .header {
-    background-color: #C0C0C0;
+    background-color: #ADD8E6;
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -34,7 +34,7 @@ body {
     text-decoration: none;
     font-size: 18px;
     font-weight: 500;
-    margin-left: 20px;
+    margin-right: 27px;
     transition: all 0.3s ease-in-out;
 }
 
