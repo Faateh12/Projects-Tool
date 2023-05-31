@@ -1,0 +1,51 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.login-container {
+    max-width: 500px; /* Increased width */
+    margin: 60px auto 0; /* Added margin-top for moving it down */
+    padding: 70px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px; /* Added border-radius */
+}
+
+.navbar {
+  background-color: #D3D3D3 /* Updated dark color */
+}
+.navbar-brand {
+  font-weight: bold;
+  color: #ffffff; /* Updated font color */
+}
+.navbar-nav .nav-link {
+  color: #ffffff; /* Updated font color */
+}
+.footer {
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.login-form .btn-login {
+  width: 100%;
+}
+
+img {
+    width: 220px;
+    height: 90px;
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+
+.form-group {
+   margin-bottom: 30px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border-radius: 10px;
+}
+
+/* Media Query for smaller screens */

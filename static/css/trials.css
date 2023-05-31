@@ -1,0 +1,43 @@
+/* Add your existing CSS styles here */
+ body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 2px solid #dddddd;
+  border-right: 2px solid #dddddd;
+}
+
+th:last-child, td:last-child {
+  border-right: none;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333333;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+/* Additional CSS for responsiveness */
+@media only screen and (max-width: 768px) {
+  table {
+    font-size: 14px;
+  }
+}
+
+

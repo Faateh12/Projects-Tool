@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .card {
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      background-color: #f8f9fa;
+      border-bottom: none;
+    }
+    .card-title {
+      margin-bottom: 0;
+      font-weight: bold;
+      text-align: center;
+    }
+    .
+  </style>
+  <title>New Trial</title>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">New Trial</h2>
+      </div>
+      <div class="card-body">
+        <form action="/new-trial" method="post">
+          <div class="form-group">
+            <label>Date:</label>
+            <input type="date" class="form-control" id="dateInput" name="date" required>
+          </div>
+          <div class="form-group">
+            <label>Operator:</label>
+            <input type="text" class="form-control" id="operator" name="operator">
+          </div>
+          <div class="form-group">
+            <label for="email">Country:</label>
+            <input type="text" class="form-control" id="email" name="country">
+          </div>
+          <div class="form-group">
+            <label>Rep Company:</label>
+            <input type="text" class="form-control" id="rep" name="rep-company">
+          </div>
+          <div class="form-group">
+            <label>Venue:</label>
+            <input type="text" class="form-control" id="venue" name="venue">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--  <title>Ticket Logging</title>-->
+<!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400,700&display=swap">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">-->
+<!--  <style>-->
+<!--    body {-->
+<!--      font-family: 'Roboto', sans-serif;-->
+<!--      background-color: #f8f8f8;-->
+<!--      padding-top: 40px;-->
+<!--    }-->
+
+<!--    .container {-->
+<!--      max-width: 600px;-->
+<!--      background-color: #ffffff;-->
+<!--      padding: 30px;-->
+<!--      border-radius: 8px;-->
+<!--      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);-->
+<!--    }-->
+
+<!--    h1 {-->
+<!--      text-align: center;-->
+<!--      font-weight: 700;-->
+<!--      color: #333333;-->
+<!--      margin-bottom: 30px;-->
+<!--    }-->
+
+<!--    label {-->
+<!--      font-weight: bold;-->
+<!--      color: #555555;-->
+<!--      font-size: 16px;-->
+<!--      margin-top: 8px;-->
+<!--    }-->
+
+<!--    button {-->
+<!--      background-color: #4CAF50;-->
+<!--      color: white;-->
+<!--      padding: 12px 24px;-->
+<!--      border: none;-->
+<!--      border-radius: 4px;-->
+<!--      cursor: pointer;-->
+<!--      font-size: 14px;-->
+<!--      font-weight: 700;-->
+<!--    }-->
+
+<!--    .error-message {-->
+<!--      color: red;-->
+<!--      font-size: 14px;-->
+<!--      margin: 12px 0;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--  <div class="container">-->
+<!--    <h1>New Trial</h1>-->
+<!--    <form id="ticketForm" action="/new-trial" method="post">-->
+<!--      <div class="mb-3">-->
+<!--        <label for="dateInput" class="form-label">Select a Date:</label>-->
+<!--        <input type="date" id="dateInput" name="dateInput" class="form-control">-->
+<!--      </div>-->
+
+<!--      <div class="mb-3">-->
+<!--        <label for="name" class="form-label">Operator:</label>-->
+<!--        <input type="text" id="name" name="operator" required class="form-control">-->
+<!--      </div>-->
+
+<!--      <div class="mb-3">-->
+<!--        <label for="email" class="form-label">Country:</label>-->
+<!--        <input type="text" id="email" name="country" required class="form-control">-->
+<!--      </div>-->
+
+<!--      <div class="mb-3">-->
+<!--        <label for="subject" class="form-label">Rep Company:</label>-->
+<!--        <input type="text" id="subject" name="rep-company" required class="form-control">-->
+<!--      </div>-->
+
+<!--      <div class="mb-3">-->
+<!--        <label for="venue" class="form-label">Venue:</label>-->
+<!--        <input type="text" id="venue" name="venue" required class="form-control">-->
+<!--      </div>-->
+
+<!--      <div class="text-center">-->
+<!--        <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+
+<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->

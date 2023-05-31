@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ trial_number }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/trial-activity.css') }}">
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tiny.cloud/1/inqc27bafgxzwj822yompjs7o4sioe8wlut1b28x1jud8q5t/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Add Bootstrap Navbar -->
+    <nav style="top: 0;" class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <button class="btn btn-primary" id="create-note">Create Note</button>
+          </li>
+          <li class="nav-item">
+            <button id="attachment" class="btn btn-primary" style="margin-left: 20px; margin-right: 10px;">Add Attachment</button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- Add Bootstrap Form -->
+    <div class="side-panel">
+      <h2 style="margin-bottom: 20px;">Files</h2>
+      <ul class="file-list" id="file-list">
+        <!-- List of uploaded files will be dynamically added here -->
+        {% for note in notes %}
+          {% if note.s3_url %}
+            <li>
+              <a href="{{ note.s3_url }}" target="_blank" style="font-size: 14px; width: auto; height: auto; display: block; padding: 10px 20px; border-radius: 5px; background-color: white; color: black; text-decoration: none; box-shadow: 1px 1px 3px rgba(0,0,0,0.3); overflow-wrap: break-word; font-family: 'Montserrat', sans-serif;">
+                  {% if note.filename.endswith('.txt') %}
+                    <i style="margin-right: 10px;" class="fas fa-file-alt fa-lg"></i>
+                  {% elif note.filename.endswith('.pdf') %}
+                    <i class="fas fa-file-pdf fa-lg" style="color: red; margin-right: 10px;"></i>
+                  {% elif note.filename.endswith('.docx') %}
+                    <i style="color: blue; margin-right: 10px;" class="fas fa-file-word fa-lg"></i>
+                  {% elif note.filename.endswith('.jpg') or note.filename.endswith('.jpeg') %}
+                    <i style="color: lightblue; margin-right: 10px;" class="fas fa-file-image fa-lg"></i>
+                  {% elif note.filename.endswith('.xls') or note.filename.endswith('.xlsx') %}
+                    <i class="fas fa-file-excel fa-lg" style="color: #4CAF50; margin-right: 10px;"></i>
+                  {% else %}
+                    <i style="margin-right: 10px;" class="fas fa-file fa-lg"></i> <!-- Default icon -->
+                  {% endif %}
+
+                {{ note.filename }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="container mt-4">
+      <form style="display: none;" id="note-form">
+        <div class="form-group">
+          <textarea id="note-text" name="note-text"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Note</button>
+      </form>
+      <div id="notes-container">
+        {% for note in notes %}
+        <div class="col-md-12" style="margin-bottom: 15px;">
+          {% if note.note %}
+            <p id="user-info" style="font-style: italic;"><span style="font-size: 23px; font-weight: bold;">{{ note.user }}</span> on {{ note.timestamp }}</p>
+            <div class="card mb-2">
+              <div class="card-body">
+                {{ note.note | safe }}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Add Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+
+      tinymce.init({
+        selector: '#note-text',
+        height: 300,
+        menubar: false,
+        plugins: [
+          'advlist autolink lists link image charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | ' +
+          'bold italic backcolor | alignleft aligncenter ' +
+          'alignright alignjustify | bullist numlist outdent indent | ' +
+          'removeformat | help'
+      });
+      // Get a reference to the form element
+      const noteForm = document.getElementById('note-form');
+      const createNote = document.getElementById('create-note');
+      createNote.addEventListener('click', () => {
+          noteForm.style.display = 'block';
+      });
+      // Add an event listener to the form's submit event
+      noteForm.addEventListener('submit', (event) => {
+        // Prevent the form from submitting via the default HTML form submission
+        event.preventDefault();
+        noteForm.style.display = 'none';
+        const saved = document.getElementById('notes-container');
+        const username = "{{ user.username }}";
+        // Get the content of the TinyMCE editor
+        const noteContent = tinymce.activeEditor.getContent();
+                const date = new Date();
+        const dateOptions = {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          hour12: true
+        };
+        const dateString = date.toLocaleString('en-US', dateOptions);
+        saved.insertAdjacentHTML('afterbegin', `
+        <div class="col-md-12" style="margin-bottom: 15px;">
+          <p id="user-info" style="font-style: italic;"><span style="font-size: 23px; font-weight: bold;">${username}</span> on ${dateString}</p>
+          <div class="card mb-2">
+            <div class="card-body">
+              ${noteContent}
+            </div>
+          </div>
+        </div>`);
+        // Create a JSON object with the note content and ticket ID
+        const noteData = {
+          'note': noteContent,
+          'trial-id': "{{ trial_number }}",
+          'timestamp': dateString
+        };
+
+        // Use the fetch function to make an AJAX request to a Flask route
+        fetch('/save-activity', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(noteData)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      });
+      document.getElementById('attachment').addEventListener('click', function() {
+        const date = new Date();
+        const dateOptions = {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          hour12: true
+        };
+        const dateString = date.toLocaleString('en-US', dateOptions);
+        const fileInput = document.createElement('input');
+        const url = "{{ url_for('upload_file') }}";
+        const saved = document.getElementById('file-list');
+        var username = "{{ user.username }}";
+        fileInput.type = 'file';
+        fileInput.accept = '.pdf,.doc,.docx,.png,.jpg,.jpeg,.gif';
+        fileInput.click();
+        fileInput.addEventListener('change', function() {
+          const file = fileInput.files[0];
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('date', dateString);
+          formData.append('trial-id', "{{ trial_number }}");
+          fetch(url, {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => console.log(data))
+          .catch(error => console.error(error));
+          let iconHTML = '';
+          const fileName = file.name;
+          const fileExtension = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
+
+          switch(fileExtension) {
+            case 'txt':
+              iconHTML = '<i style="margin-right: 10px;" class="fas fa-file-alt fa-lg"></i>';
+              break;
+            case 'pdf':
+              iconHTML = '<i class="fas fa-file-pdf fa-lg" style="color: red; margin-right: 10px;"></i>';
+              break;
+            case 'docx':
+              iconHTML = '<i style="color: blue; margin-right: 10px;" class="fas fa-file-word fa-lg"></i>';
+              break;
+            case 'jpg':
+            case 'jpeg':
+              iconHTML = '<i style="color: lightblue; margin-right: 10px;" class="fas fa-file-image fa-lg"></i>';
+              break;
+            case 'xls':
+            case 'xlsx':
+              iconHTML = '<i class="fas fa-file-excel fa-lg" style="color: #4CAF50; margin-right: 10px;"></i>';
+              break;
+            default:
+              iconHTML = '<i style="margin-right: 10px;" class="fas fa-file fa-lg"></i>';
+          }
+
+          saved.insertAdjacentHTML('afterbegin', `
+            <li>
+              <a href="https://trials-tool-bucket.s3.amazonaws.com/${file.name}" target="_blank" style="font-size: 14px; width: auto; height: auto; display: block; padding: 10px 20px; border-radius: 5px; background-color: white; color: black; text-decoration: none; box-shadow: 1px 1px 3px rgba(0,0,0,0.3); overflow-wrap: break-word; font-family: 'Montserrat', sans-serif;">
+                ${iconHTML}
+                ${fileName}
+              </a>
+            </li>
+          `);
+        });
+      });
+    </script>
+  </body>
+</html>
+
+

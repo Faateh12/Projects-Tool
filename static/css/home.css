@@ -1,0 +1,107 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.header {
+    background-color: #C0C0C0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.logo {
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: black;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+}
+
+.nav a {
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.nav a:hover {
+    color: white;
+}
+
+.hero {
+    background-image: url('https://example.com/hero-image.jpg');
+    background-size: cover;
+    background-position: center center;
+    height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 64px;
+    font-weight: 600;
+    color: black;
+    margin: 0;
+    text-shadow: 2px 2px #000;
+}
+
+.hero p {
+    font-size: 24px;
+    font-weight: 400;
+    color: #fff;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px #000;
+}
+
+.cta {
+    background-color: #303030;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+}
+
+.cta h2 {
+    font-size: 36px;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.cta button {
+    background-color: #f7c08a;
+    color: #303030;
+    border: none;
+    padding: 20px 40px;
+    font-size: 20px;
+    font-weight: 500;
+    text-transform: uppercase;
+    border-radius: 50px;
+    margin-left: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.cta button:hover {
+    background-color: #fff;
+    color: #f7c08a;
+}
