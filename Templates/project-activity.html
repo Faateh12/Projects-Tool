@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ trial_number }}</title>
+    <title>{{ project_number }}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/project-activity.css') }}">
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -133,7 +133,7 @@
         // Create a JSON object with the note content and ticket ID
         const noteData = {
           'note': noteContent,
-          'trial-id': "{{ trial_number }}",
+          'project-id': "{{ project_number }}",
           'timestamp': dateString
         };
 
@@ -181,7 +181,7 @@
           const formData = new FormData();
           formData.append('file', file);
           formData.append('date', dateString);
-          formData.append('trial-id', "{{ trial_number }}");
+          formData.append('project-id', "{{ project_number }}");
           fetch(url, {
             method: 'POST',
             body: formData
@@ -217,7 +217,7 @@
 
           saved.insertAdjacentHTML('afterbegin', `
             <li>
-              <a href="https://trials-tool-bucket.s3.amazonaws.com/${file.name}" target="_blank" style="font-size: 14px; width: auto; height: auto; display: block; padding: 10px 20px; border-radius: 5px; background-color: white; color: black; text-decoration: none; box-shadow: 1px 1px 3px rgba(0,0,0,0.3); overflow-wrap: break-word; font-family: 'Montserrat', sans-serif;">
+              <a href="https://projectstool-bucket.s3.amazonaws.com/${file.name}" target="_blank" style="font-size: 14px; width: auto; height: auto; display: block; padding: 10px 20px; border-radius: 5px; background-color: white; color: black; text-decoration: none; box-shadow: 1px 1px 3px rgba(0,0,0,0.3); overflow-wrap: break-word; font-family: 'Montserrat', sans-serif;">
                 ${iconHTML}
                 ${fileName}
               </a>

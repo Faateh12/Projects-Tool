@@ -40,7 +40,7 @@ class notes(db.Model):
     __tablename__ = 'notes'
     id = db.Column(db.Integer, primary_key=True)
     note = db.Column(db.String(5000))
-    trial_id = db.Column(db.String(100))
+    project_id = db.Column(db.String(100))
     timestamp = db.Column(db.String(100))
     user = db.Column(db.String(100))
     filename = db.Column(db.String(500))
@@ -53,9 +53,9 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(100))
 #
-with app.app_context():
-    # Create the tables
-    db.create_all()
+# with app.app_context():
+#     # Create the tables
+#     db.create_all()
 
 
 @login_manager.user_loader
@@ -179,8 +179,8 @@ def new_project():
 # @login_required
 def project_activity(id):
     current = current_user._get_current_object()
-    results = notes.query.filter_by(trial_id=id).order_by(notes.id.desc()).all()
-    return render_template("project-activity.html", notes=results, trial_number=id, user=current)
+    results = notes.query.filter_by(project_id=id).order_by(notes.id.desc()).all()
+    return render_template("project-activity.html", notes=results, project_number=id, user=current)
 
 @app.route("/save-activity", methods=['GET', 'POST'])
 # @login_required
@@ -190,11 +190,11 @@ def save_activity():
         note_data = request.get_json()
         print(note_data)
         note_text = note_data.get('note')
-        trial_id = note_data.get('trial-id')
+        project_id = note_data.get('project-id')
         timestamp = note_data.get('timestamp')
         note = notes(
             note=note_text,
-            trial_id=trial_id,
+            project_id=project_id,
             timestamp=timestamp,
             user=current.username
         )
@@ -224,15 +224,15 @@ def update_ticket():
 @login_required
 def upload_file():
     if request.method == "POST":
-        trial_id = request.form.get('trial-id')
+        project_id = request.form.get('project-id')
         timestamp = request.form.get('date')
         file = request.files['file']
         current = current_user._get_current_object()
         note = notes(
-            trial_id=trial_id,
+            project_id=project_id,
             timestamp=timestamp,
             user=current.username,
-            s3_url=f'https://trials-tool-bucket.s3.amazonaws.com/{file.filename}',
+            s3_url=f'https://projectstool-bucket.s3.amazonaws.com/{file.filename}',
             filename=file.filename
         )
         db.session.add(note)
@@ -248,7 +248,7 @@ def upload_file():
         if content_type:
             print(content_type)
             s3.put_object(
-                Bucket='trials-tool-bucket',
+                Bucket='projectstool-bucket',
                 Key=file.filename,
                 Body=file,
                 ACL='public-read',
@@ -257,7 +257,7 @@ def upload_file():
             )
         else:
             s3.put_object(
-                Bucket='trials-tool-bucket',
+                Bucket='projectstool-bucket',
                 Key=file.filename,
                 Body=file,
                 ACL='public-read'

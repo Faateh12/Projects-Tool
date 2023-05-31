@@ -1,47 +1,45 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Projects</title>
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/projects.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-  <table id="myTable">
-    <thead style="position: sticky; top: 0;">
-      <tr>
-        <th style="width: 120px;">Project ID</th>
-        <th>Year</th>
-        <th>Country</th>
-        <th>Status</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Result</th>
-        <th>Notes</th>
-        <th>Last Update Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in rows %}
-      <tr>
-        <td><a href="{{ url_for('project_activity', id=row.project_id) }}" target="_blank">{{ row.project_id }}</a></td>
-        <td data-field="trial_year">{{ row.project_year }}</td>
-        <td data-field="country">{{ row.country }}</td>
-        <td data-field="status">{{ row.status }}</td>
-        <td data-field="start_date">{{ row.start_date }}</td>
-        <td data-field="end_date">{{ row.end_date }}</td>
-        <td data-field="result">{{ row.result }}</td>
-        <td data-field="notes">{{ row.notes }}</td>
-        <td data-field="last_updated">{{ row.last_updated }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search">
+    <table id="myTable" class="table-bordered">
+      <thead style="position: sticky; top: 0;">
+        <tr>
+          <th style="width: 150px;">Project ID</th>
+          <th>Year</th>
+          <th>Country</th>
+          <th>Status</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Result</th>
+          <th>Notes</th>
+          <th>Last Update Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td><a href="{{ url_for('project_activity', id=row.project_id) }}" target="_blank">{{ row.project_id }}</a></td>
+          <td data-field="trial_year">{{ row.project_year }}</td>
+          <td data-field="country">{{ row.country }}</td>
+          <td data-field="status">{{ row.status }}</td>
+          <td data-field="start_date">{{ row.start_date }}</td>
+          <td data-field="end_date">{{ row.end_date }}</td>
+          <td data-field="result">{{ row.result }}</td>
+          <td data-field="notes">{{ row.notes }}</td>
+          <td data-field="last_updated">{{ row.last_updated }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
   <script>
-
 
     var table = document.querySelector('table');
     // Add event listener to each row
@@ -86,6 +84,15 @@
             }
         });
     }
+    $(document).ready(function() {
+      // Initialize searching
+      $('#searchInput').keyup(function() {
+        var value = $(this).val().toLowerCase();
+        $('#myTable tbody tr').filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+      });
+    });
   </script>
 </body>
 </html>

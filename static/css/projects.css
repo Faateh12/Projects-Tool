@@ -50,3 +50,9 @@ a:visited {
 }
 
 
+#searchInput {
+  width: 200px;
+  float: right;
+}
+
+
