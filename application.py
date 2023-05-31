@@ -9,17 +9,17 @@ from bs4 import BeautifulSoup
 import boto3
 
 
-app = Flask(__name__, template_folder="Templates")
+application = Flask(__name__, template_folder="Templates")
 
 # AWS production uri
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Faateh:Faateh123@projects-db.cwvdgyt4btit.us-east-1.rds.amazonaws.com:5432/projecttool_db'
+application.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Faateh:Faateh123@projects-db.cwvdgyt4btit.us-east-1.rds.amazonaws.com:5432/projecttool_db'
 
 # development uri
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Faateh123@localhost:5432/projects_test'
-app.config['SECRET_KEY'] = 'secret!'
-app.config['SQLALCHEMY_ECHO'] = True
-db = SQLAlchemy(app)
-login_manager = LoginManager(app)
+#application.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Faateh123@localhost:5432/projects_test'
+application.config['SECRET_KEY'] = 'secret!'
+application.config['SQLALCHEMY_ECHO'] = True
+db = SQLAlchemy(application)
+login_manager = LoginManager(application)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 s3 = boto3.client('s3', region_name='us-east-1')
@@ -62,7 +62,7 @@ class User(UserMixin, db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-@app.route('/logout')
+@application.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -90,7 +90,7 @@ def generate_next_trial_id():
 
 
 
-@app.route('/', methods=['GET', 'POST'])
+@application.route('/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         logout_user()
@@ -113,7 +113,7 @@ def login():
     return response
 
 
-@app.route("/register", methods=['GET', 'POST'])
+@application.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
         username = request.form['name']
@@ -140,18 +140,18 @@ def register():
 
 
 
-@app.route('/user-home', methods=['GET', 'POST'])
+@application.route('/user-home', methods=['GET', 'POST'])
 @login_required
 def user_home():
     current = current_user._get_current_object()
     return render_template("home.html", user=current)
 
-@app.route('/projects', methods=['GET', 'POST'])
+@application.route('/projects', methods=['GET', 'POST'])
 def projects():
     rows = Projects.query.all()
     return render_template("projects.html", rows=rows)
 
-@app.route('/new-project', methods=['GET', 'POST'])
+@application.route('/new-project', methods=['GET', 'POST'])
 def new_project():
     if request.method == "POST":
         # operator = request.form.get("operator")
@@ -175,14 +175,14 @@ def new_project():
         print("sucessfully added new trial")
     return render_template("new-project.html")
 
-@app.route("/project-activity/<id>", methods=['GET', 'POST'])
+@application.route("/project-activity/<id>", methods=['GET', 'POST'])
 # @login_required
 def project_activity(id):
     current = current_user._get_current_object()
     results = notes.query.filter_by(project_id=id).order_by(notes.id.desc()).all()
     return render_template("project-activity.html", notes=results, project_number=id, user=current)
 
-@app.route("/save-activity", methods=['GET', 'POST'])
+@application.route("/save-activity", methods=['GET', 'POST'])
 # @login_required
 def save_activity():
     current = current_user._get_current_object()
@@ -203,7 +203,7 @@ def save_activity():
     return jsonify({'status': 'success'})
 
 
-@app.route("/update-project", methods=['GET', 'POST'])
+@application.route("/update-project", methods=['GET', 'POST'])
 # @login_required
 def update_ticket():
     if request.method == "POST":
@@ -220,7 +220,7 @@ def update_ticket():
         db.session.commit()
     return jsonify({'status': 'success'})
 
-@app.route('/upload-file', methods=['GET', 'POST'])
+@application.route('/upload-file', methods=['GET', 'POST'])
 @login_required
 def upload_file():
     if request.method == "POST":
@@ -273,6 +273,6 @@ def upload_file():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)
 
 
