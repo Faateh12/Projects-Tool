@@ -12,10 +12,10 @@ import boto3
 app = Flask(__name__, template_folder="Templates")
 
 # AWS production uri
-#application.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Faateh:Faateh123@trials-db.cwvdgyt4btit.us-east-1.rds.amazonaws.com:5432/test_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Faateh:Faateh123@projects-db.cwvdgyt4btit.us-east-1.rds.amazonaws.com:5432/projecttool_db'
 
 # development uri
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Faateh123@localhost:5432/projects_test'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Faateh123@localhost:5432/projects_test'
 app.config['SECRET_KEY'] = 'secret!'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
