@@ -58,6 +58,8 @@ class User(UserMixin, db.Model):
 #     # Create the tables
 #     db.create_all()
 
+# Test
+
 
 @login_manager.user_loader
 def load_user(user_id):
