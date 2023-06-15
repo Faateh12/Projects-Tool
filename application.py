@@ -36,6 +36,10 @@ class Projects(db.Model):
     result = db.Column(db.String(500))
     notes = db.Column(db.String(1000))
     last_updated = db.Column(db.String(500))
+    project_name = db.Column(db.String(500))
+    assigned_to = db.Column(db.String(500))
+    due_date = db.Column(db.String(500))
+
 
 class notes(db.Model):
     __tablename__ = 'notes'
@@ -181,7 +185,7 @@ def user_home():
 
 @application.route('/projects', methods=['GET', 'POST'])
 def projects():
-    rows = Projects.query.all()
+    rows = Projects.query.order_by(Projects.project_id.asc()).all()
     return render_template("projects.html", rows=rows)
 
 @application.route('/new-project', methods=['GET', 'POST'])

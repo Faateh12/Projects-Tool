@@ -11,10 +11,13 @@
       <thead style="position: sticky; top: 0;">
         <tr>
           <th style="width: 150px;">Project ID</th>
+          <th>Project Name</th>
+          <th>Assigned To</th>
           <th>Year</th>
           <th>Country</th>
           <th>Status</th>
           <th>Start Date</th>
+          <th>Due Date</th>
           <th>End Date</th>
           <th>Result</th>
           <th>Notes</th>
@@ -25,10 +28,13 @@
         {% for row in rows %}
         <tr>
           <td><a href="{{ url_for('project_activity', id=row.project_id) }}" target="_blank">{{ row.project_id }}</a></td>
+          <td data-field="project_name">{{ row.project_name }}</td>
+          <td data-field="assigned_to">{{ row.assigned_to }}</td>
           <td data-field="trial_year">{{ row.project_year }}</td>
           <td data-field="country">{{ row.country }}</td>
           <td data-field="status">{{ row.status }}</td>
           <td data-field="start_date">{{ row.start_date }}</td>
+          <td data-field="due_date">{{ row.due_date }}</td>
           <td data-field="end_date">{{ row.end_date }}</td>
           <td data-field="result">{{ row.result }}</td>
           <td data-field="notes">{{ row.notes }}</td>
