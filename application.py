@@ -2,13 +2,13 @@ import json
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, jsonify, flash, redirect, make_response, url_for
+from flask import Flask, render_template, request, jsonify, flash, redirect, make_response, url_for, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from bs4 import BeautifulSoup
 import boto3
 import jwt
-
+from flask_mail import Mail, Message
 
 application = Flask(__name__, template_folder="Templates")
 
@@ -19,11 +19,18 @@ application.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Faateh:Faateh123@p
 #application.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Faateh123@localhost:5432/projects_test'
 application.config['SECRET_KEY'] = 'secret!'
 application.config['SQLALCHEMY_ECHO'] = True
+application.config['MAIL_SERVER'] = 'smtp.gmail.com'
+application.config['MAIL_PORT'] = 587
+application.config['MAIL_USE_TLS'] = True
+application.config['MAIL_USERNAME'] = 'matsingtools@gmail.com'
+application.config['MAIL_PASSWORD'] = 'lvfnjwubxveklhjc'
+application.config['MAIL_DEFAULT_SENDER'] = 'matsingtools@gmail.com'
 db = SQLAlchemy(application)
 login_manager = LoginManager(application)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 s3 = boto3.client('s3', region_name='us-east-1')
+mail = Mail(application)
 
 class Projects(db.Model):
     __tablename__ = 'projects'
@@ -103,7 +110,24 @@ def verify_and_decode_token(token):
     except jwt.InvalidTokenError:
         return None
 
+def send_error_email(error, is_local=False):
+    if is_local:
+        recipients = ['faateh.work@gmail.com']
+        subject = 'Error on Projects tool local host'
+    else:
+        recipients = ['faateh.work@gmail.com']
+        subject = 'Error on Projects tool'
 
+    msg = Message(subject, recipients=recipients)
+    msg.html = render_template('error_email.html', error=error)
+
+    mail.send(msg)
+
+@application.errorhandler(500)
+def internal_server_error(error):
+    is_local = request.host == '127.0.0.1:5000'
+    send_error_email(error, is_local)
+    return render_template('500.html'), 500
 
 
 @application.route('/', methods=['GET', 'POST'])
